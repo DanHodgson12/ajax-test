@@ -13,14 +13,33 @@ function getData(type, cb) {
     }
 }
 
+function getTableHeaders(obj) {
+    var tableHeaders = [];
+
+    Object.keys(obj).forEach(function(key) {
+        tableHeaders.push(`<td>${key}</td>`)
+    });
+
+    return `<td>${tableHeaders}</td>`;
+}
+
 function writeToDocument(type) {
+    var tableRows = [];
     var el = document.getElementById("data");
     el.innerHTML = "";
-    getData(type, function (data) {
+    getData(type, function(data) {
         data = data.results;
+        var tableHeaders = getTableHeaders(data[0]);
 
         data.forEach(function(item) {
-            el.innerHTML += "<p>" + item.name + "</p>";
+            var dataRow = [];
+
+            Object.keys(item).forEach(function(key) {
+                dataRow.push(`<td>${item[key]}</td>`);
+            });
+            tableRows.push(dataRow);
         });
+
+        el.innerHTML = `<table>${tableHeaders}${tableRows}</table>`;
     });
 }
